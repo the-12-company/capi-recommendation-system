@@ -1,3 +1,6 @@
+import { SalesMetricsModule } from './sales-metrics/sales-metrics.module';
+import { SalesMetricsService } from './sales-metrics/sales-metrics.service';
+import { SalesMetricsController } from './sales-metrics/sales-metrics.controller';
 import { Logger, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -11,6 +14,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    SalesMetricsModule,
     AuthModule,
     UserModule,
     PostModule,
@@ -36,8 +40,9 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     }),
     UploadModule,
   ],
-  controllers: [],
+  controllers: [SalesMetricsController],
   providers: [
+    SalesMetricsService,
     Logger,
     {
       provide: APP_FILTER,
