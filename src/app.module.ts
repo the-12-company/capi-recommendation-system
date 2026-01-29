@@ -1,3 +1,4 @@
+import { PdfGeneratorModule } from './pdf-generator/pdf-generator.module';
 import { SalesMetricsModule } from './sales-metrics/sales-metrics.module';
 import { SalesMetricsService } from './sales-metrics/sales-metrics.service';
 import { SalesMetricsController } from './sales-metrics/sales-metrics.controller';
@@ -14,6 +15,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    PdfGeneratorModule,
     SalesMetricsModule,
     AuthModule,
     UserModule,
@@ -35,7 +37,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      synchronize: false, //se cair em prod = 1:1 com RH
+      synchronize: true,
       autoLoadEntities: true,
     }),
     UploadModule,
