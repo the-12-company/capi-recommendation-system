@@ -5,6 +5,8 @@ import {
   UseGuards,
   UseInterceptors,
   BadRequestException,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -31,5 +33,20 @@ export class SalesController {
         insertedRows: result.inserted,
       },
     };
+  }
+
+  @Get('monthly')
+  async getMonthlyMetrics(
+    @Query('year') year: string,
+    @Query('month') month: string,
+  ) {
+    const parsedYear = Number(year);
+    const parsedMonth = Number(month);
+
+    if (!parsedYear || !parsedMonth) {
+      throw new BadRequestException('year and month are required');
+    }
+
+    return this.salesService.getMonthlyMetrics(parsedYear, parsedMonth);
   }
 }

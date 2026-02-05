@@ -6,6 +6,12 @@ import { Repository } from 'typeorm';
 import { Readable } from 'stream';
 
 // Interface para os dados brutos do CSV
+interface MonthlyMetricsRaw {
+  totalSales: string | null;
+  totalItems: string | null;
+  totalValue: string | null;
+  totalCost: string | null;
+}
 interface SalesCSVRecord {
   data?: string;
   num_nota_saida?: string | number;
@@ -131,6 +137,36 @@ export class SalesService {
       custoMercadoriaVendida: parseOptionalNumber(
         record.custo_mercadoria_vendida,
       ),
+    };
+  }
+
+  async getMonthlyMetrics(year: number, month: number) {
+    if (month < 1 || month > 12) {
+      throw new BadRequestException('Invalid month');
+    }
+
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+
+    const result = await this.salesRepository
+      .createQueryBuilder('sale')
+      .select([
+        'COUNT(*) as "totalSales"',
+        'SUM(sale.qtdItens) as "totalItems"',
+        'SUM(sale.valor) as "totalValue"',
+        'SUM(sale.custoMercadoriaVendida) as "totalCost"',
+      ])
+      .where('sale.data >= :startDate', { startDate })
+      .andWhere('sale.data < :endDate', { endDate })
+      .getRawOne<MonthlyMetricsRaw>();
+
+    return {
+      year,
+      month,
+      totalSales: Number(result?.totalSales ?? 0),
+      totalItems: Number(result?.totalItems ?? 0),
+      totalValue: Number(result?.totalValue ?? 0),
+      totalCost: Number(result?.totalCost ?? 0),
     };
   }
 }
