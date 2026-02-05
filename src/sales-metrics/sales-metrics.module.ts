@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { SalesMetricsController } from './sales-metrics.controller';
-import { SalesMetricsService } from './sales-metrics.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { SaleEntity } from './entities/sales.entity';
+import { SalesController } from './sales-metrics.controller';
+import { SalesService } from './sales-metrics.service';
 
 @Module({
-  controllers: [SalesMetricsController],
-  providers: [SalesMetricsService],
-  exports: [SalesMetricsService], // Exporta para usar em outros módulos (ex: PDF generator)
+  imports: [
+    TypeOrmModule.forFeature([SaleEntity]), // 👈 OBRIGATÓRIO
+  ],
+  controllers: [SalesController],
+  providers: [SalesService],
+  exports: [SalesService],
 })
 export class SalesMetricsModule {}

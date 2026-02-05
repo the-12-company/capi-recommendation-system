@@ -8,30 +8,27 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { jwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { SalesMetricsService } from './sales-metrics.service';
+import { SalesService } from './sales-metrics.service';
 
-@Controller('sales-metrics')
-export class SalesMetricsController {
-  constructor(private readonly salesMetricsService: SalesMetricsService) {}
+@Controller('sales')
+export class SalesController {
+  constructor(private readonly salesService: SalesService) {}
 
   @Post('upload-csv')
   @UseGuards(jwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  uploadCSV(@UploadedFile() file: Express.Multer.File) {
+  async uploadCSV(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
 
-    const salesMetrics = this.salesMetricsService.processCSV(file);
-    const aggregatedMetrics =
-      this.salesMetricsService.calculateAggregatedMetrics(salesMetrics);
+    const result = await this.salesService.processCSV(file);
 
     return {
       success: true,
-      message: 'CSV processed successfully',
+      message: 'CSV ingested successfully',
       data: {
-        metrics: salesMetrics,
-        summary: aggregatedMetrics,
+        insertedRows: result.inserted,
       },
     };
   }

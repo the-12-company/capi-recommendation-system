@@ -1,7 +1,3 @@
-import { PdfGeneratorModule } from './pdf-generator/pdf-generator.module';
-import { SalesMetricsModule } from './sales-metrics/sales-metrics.module';
-import { SalesMetricsService } from './sales-metrics/sales-metrics.service';
-import { SalesMetricsController } from './sales-metrics/sales-metrics.controller';
 import { Logger, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -12,10 +8,11 @@ import { UploadModule } from './upload/upload.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { SalesMetricsModule } from './sales-metrics/sales-metrics.module';
+import { SalesController } from './sales-metrics/sales-metrics.controller';
 
 @Module({
   imports: [
-    PdfGeneratorModule,
     SalesMetricsModule,
     AuthModule,
     UserModule,
@@ -42,9 +39,8 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     }),
     UploadModule,
   ],
-  controllers: [SalesMetricsController],
+  controllers: [SalesController],
   providers: [
-    SalesMetricsService,
     Logger,
     {
       provide: APP_FILTER,
