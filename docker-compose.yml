@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nestjs-for-blog
+    container_name: capi-compass
     # depends_on garante que o banco de dados inicie antes da sua API
     depends_on:
       - db

@@ -1,3 +1,4 @@
+import { PredictionModule } from './prediction/prediction.module';
 import { Logger, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -13,6 +14,7 @@ import { SalesController } from './sales-metrics/sales-metrics.controller';
 
 @Module({
   imports: [
+    PredictionModule,
     SalesMetricsModule,
     AuthModule,
     UserModule,
