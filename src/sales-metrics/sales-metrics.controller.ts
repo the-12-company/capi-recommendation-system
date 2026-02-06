@@ -49,4 +49,22 @@ export class SalesController {
 
     return this.salesService.getMonthlyMetrics(parsedYear, parsedMonth);
   }
+
+  // métricas agregadas de todos os meses
+  @Get('monthly/all')
+  async getAllMonthlyMetrics() {
+    return this.salesService.getMonthlyMetricsAll();
+  }
+
+  // insights mensais (ticket, margem, MoM etc)
+  @Get('monthly/insights')
+  async getMonthlyInsights() {
+    return this.salesService.getMonthlyInsights();
+  }
+
+  // insights anuais (visão estratégica)
+  @Get('yearly/insights')
+  async getYearlyInsights() {
+    return this.salesService.getYearlyInsights();
+  }
 }
